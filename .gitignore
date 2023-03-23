@@ -1,0 +1,5 @@
+staticfiles-cdn/
+.DS_STORE
+venv/
+
+__pycache__/
