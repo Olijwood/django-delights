@@ -85,9 +85,10 @@ services:
   - key: DATABASE_URL
     scope: RUN_TIME
     value: ${db.DATABASE_URL}
-  git:
+  github:
     branch: production-3
-    repo_clone_url: https://github.com/codingforentrepreneurs/Try-Django-3.2.git
+    deploy_on_push: true
+    reop: olijwood/django-delights
   http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xxs
