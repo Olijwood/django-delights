@@ -132,7 +132,7 @@ def recipe_update_view(request, id=None):
     form = RecipeForm(request.POST or None, instance=obj)
     new_ingredient_url = reverse("recipes:hx-ingredient-create", kwargs={"parent_id": obj.id})
     recipe_image = RecipeImage.objects.filter(recipe__id=id).first()
-    image = None
+    image = 'recipes/images/default-pic.jpg'
     if recipe_image is not None:
         image = recipe_image.image
         print(image)
@@ -227,6 +227,10 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
 
     return render(request, template_name, {"form":form})
 
+import os
+from PIL import Image
+import secrets
+
 def recipe_image_upload_view(request, parent_id=None):
     template_name = "recipes/upload-image.html"
     if request.htmx:
@@ -239,6 +243,7 @@ def recipe_image_upload_view(request, parent_id=None):
         raise Http404
     form = RecipeImageForm(request.POST or None, request.FILES or None)
     if form.is_valid():
+        
         obj = form.save(commit=False)
         obj.recipe_id = parent_id
         # obj.recipe_id = parent_id
