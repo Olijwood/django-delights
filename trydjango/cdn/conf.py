@@ -7,7 +7,7 @@ AWS_LOCATION = "staticfiles"
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
-AWS_S3_ENDPOINT_URL = "https://django-delights.ams3.digitaloceanspaces.com/"
+AWS_S3_ENDPOINT_URL = "https://django-delights.ams3.digitaloceanspaces.com"
 
 AWS_DEFAULT_ACL = 'public-read'
 
