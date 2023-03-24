@@ -134,7 +134,7 @@ def recipe_update_view(request, id=None):
     recipe_image = RecipeImage.objects.filter(recipe__id=id).first()
     image = None
     if recipe_image is not None:
-        image = recipe_image.image
+        image = recipe_image.image.url
         print(image)
     context = {
         "form": form,
