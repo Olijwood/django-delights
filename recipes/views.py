@@ -140,7 +140,7 @@ def recipe_update_view(request, id=None):
         "form": form,
         "object": obj,
         "new_ingredient_url": new_ingredient_url,
-        "recipe_image": image
+        "image": image
 
     }
     if form.is_valid():
