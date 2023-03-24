@@ -131,7 +131,7 @@ def recipe_update_view(request, id=None):
     obj = get_object_or_404(Recipe, id=id, user=request.user)
     form = RecipeForm(request.POST or None, instance=obj)
     new_ingredient_url = reverse("recipes:hx-ingredient-create", kwargs={"parent_id": obj.id})
-    recipe_image = RecipeImage.objects.filter(recipe__id=id).first()
+    recipe_image = RecipeImage.objects.filter(recipe__id=id).last()
     image = 'recipes/images/default-pic.jpg'
     if recipe_image is not None:
         image = recipe_image.image
