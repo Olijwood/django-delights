@@ -1,7 +1,7 @@
 from django import forms
 
 
-from .models import Recipe, RecipeIngredient, RecipeIngredientImage
+from .models import Recipe, RecipeIngredient, RecipeIngredientImage, RecipeImage
 
 class RecipeIngredientImageForm(forms.ModelForm):
     class Meta:
@@ -11,10 +11,18 @@ class RecipeIngredientImageForm(forms.ModelForm):
             "image": "Extract via Image Upload"
         }
 
+class RecipeImageForm(forms.ModelForm):
+    class Meta:
+        model = RecipeImage
+        fields = ['image']
+        labels = {
+            "image": "Upload image of your recipe here:"
+        }
+
 class RecipeForm(forms.ModelForm):
     error_css_class = 'error-field'
     required_css_class = 'required-field'
-    name = forms.CharField(help_text='This is your help! <a href="/contact">Contact us</a>')
+    name = forms.CharField()
     # descriptions = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     class Meta:
         model = Recipe

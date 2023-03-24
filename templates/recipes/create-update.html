@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block content %}
 
@@ -10,19 +10,37 @@
     .hidden {
         display: none
     }
+    .account-img {
+        height: 125px;
+        width: 125px;
+        margin-bottom: 10px;
+  }
 </style>
 
 <div class='row'>
         <div class='{% if object.id %}col-12 col-md-8 {% else %} col-md-6 mx-auto {% endif %}'>
             {% if not object.id %}
                 <h1>Create Recipe</h1>
+               
             {% endif %}
-
-
+            {% if object.id %}
+            {{ object.id }}
+            <div class="media" align="center">
+                <img src="https://ams3.digitaloceanspaces.com/djangodelights/djangodelights/media/{{ image }}" alt="recipe image">
+                <small align="center"><div hx-get="{{ object.get_image_upload_url }}" hx-trigger='revealed'></div></small>
+            </div>
+            {% endif %}
             {% include 'recipes/partials/forms.html' %}
+            
+            {% if not new_ingredient_url %}
+                <small><p>(You can add ingredients once you have clicked 'Save')</p></small>
+            {% endif %}
         </div>
+        <br>
 
         <div class='{% if object.id %}col-12 col-md-4 {% else %} d-none {% endif %}'>
+            {% if new_ingredient_url %}
+            <br>  
             <h3>Ingredients</h3>
             
             <div id='ingredients-list'>
@@ -30,12 +48,13 @@
                     {% include 'recipes/partials/ingredient-inline.html' with object=ingredient %}
             {% endfor %}
             </div>
-            
-            {% if new_ingredient_url %}
-            <div hx-get="{{ object.get_image_upload_url }}" hx-trigger='revealed'></div>               
+            <br>
+                         
             <button hx-get="{{ new_ingredient_url }}" hx-trigger='click'
                 hx-target='#ingredients-list' hx-swap='beforeend'>Add ingredient</button>
-
+                <br>
+                <br>
+                <small><div hx-get="{{ object.get_ingredients_image_upload_url }}" hx-trigger='revealed'></div></small>
             {% endif %}
         </div>
 </div>

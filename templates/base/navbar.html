@@ -14,24 +14,30 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
+              Recipes
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="{% url 'recipes:create' %}">Create A Recipe</a></li>
+              <li><a class="dropdown-item" href="{% url 'recipes:my-list' %}">My Recipes</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="{% url 'recipes:list' %}">View All</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+          {% if not request.user.is_authenticated %}
+          <li class="nav-link">
+            <a class="dropdown-item" href="{% url 'login' %}">Login</a>
           </li>
+          <li class="nav-link">
+            <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+          </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
+            <li class="nav-link">
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% endif %}
         </ul>
-        {% if request.user.is_authenticated %}
-        {% include 'search/search-form.html' %}
-        {% endif %}
-
-      
+          {% include 'search/search-form.html' %}
       </div>
     </div>
   </nav>

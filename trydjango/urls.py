@@ -34,7 +34,7 @@ urlpatterns = [
     path('meal-toggle/<int:recipe_id>/', meal_queue_toggle_view, name='meal-toggle'),
     path('search/', search_view, name='search'),
     path('admin/', admin.site.urls),
-    path('login/', login_view),
-    path('logout/', logout_view),
-    path('register/', register_view),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('register/', register_view, name='register'),
 ]

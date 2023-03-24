@@ -68,11 +68,24 @@ class Recipe(models.Model):
 
     def get_ingredients_children(self):
         return self.recipeingredient_set.all()
-
+    
     def get_image_upload_url(self):
+        return reverse("recipes:recipe-image-upload", kwargs={"parent_id": self.id})
+
+    def get_ingredients_image_upload_url(self):
         return reverse("recipes:recipe-ingredient-image-upload", kwargs={"parent_id": self.id})
+    
+    def get_image(self):
+        return self.recipeimage_set.get(recipe__id=self.id)
 
+def recipe_image_upload_handler(instance, filename):
+    fpath = pathlib.Path(filename)
+    new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
+    return f"recipes/images/{new_fname}{fpath.suffix}"
 
+class RecipeImage(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=recipe_image_upload_handler, unique=True, default="recipes/images/default.jpg")
 
 def recipe_ingredient_image_upload_handler(instance, filename):
     fpath = pathlib.Path(filename)

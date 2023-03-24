@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm
-from .models import Recipe, RecipeIngredient
+from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm, RecipeImageForm
+from .models import Recipe, RecipeIngredient, RecipeImage
 from .services import extract_text_via_ocr_service
 from .utils import (
     convert_to_qty_units,
@@ -15,11 +15,19 @@ from .utils import (
 
 @login_required
 def recipe_list_view(request):
-    qs = Recipe.objects.filter(user=request.user)
+    qs = Recipe.objects.all()
     context = {
         "object_list": qs
     }
     return render(request, "recipes/list.html", context)
+
+@login_required
+def recipe_user_list_view(request):
+    qs = Recipe.objects.filter(user=request.user)
+    context = {
+        "object_list": qs
+    }
+    return render(request, "recipes/my-list.html", context)
 
 
 @login_required
@@ -57,7 +65,7 @@ def recipe_delete_view(request, id=None):
 
 
 @login_required
-def recipe_incredient_delete_view(request, parent_id=None, id=None):
+def recipe_ingredient_delete_view(request, parent_id=None, id=None):
     try:
         obj = RecipeIngredient.objects.get(recipe__id=parent_id, id=id, recipe__user=request.user)
     except:
@@ -123,10 +131,17 @@ def recipe_update_view(request, id=None):
     obj = get_object_or_404(Recipe, id=id, user=request.user)
     form = RecipeForm(request.POST or None, instance=obj)
     new_ingredient_url = reverse("recipes:hx-ingredient-create", kwargs={"parent_id": obj.id})
+    recipe_image = RecipeImage.objects.filter(recipe__id=id).first()
+    image = None
+    if recipe_image is not None:
+        image = recipe_image.image
+        print(image)
     context = {
         "form": form,
         "object": obj,
-        "new_ingredient_url": new_ingredient_url
+        "new_ingredient_url": new_ingredient_url,
+        "recipe_image": image
+
     }
     if form.is_valid():
         form.save()
@@ -173,9 +188,9 @@ def recipe_ingredient_update_hx_view(request, parent_id=None, id=None):
 
 
 def recipe_ingredient_image_upload_view(request, parent_id=None):
-    template_name = "recipes/upload-image.html"
+    template_name = "recipes/ingredient-upload-image.html"
     if request.htmx:
-        template_name = "recipes/partials/image-upload-form.html"
+        template_name = "recipes/partials/ingredient-image-upload-form.html"
     try:
         parent_obj = Recipe.objects.get(id=parent_id, user=request.user)
     except:
@@ -203,6 +218,35 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
             new_objs.append(RecipeIngredient(**data))
         RecipeIngredient.objects.bulk_create(new_objs)
         success_url = parent_obj.get_edit_url()
+        if request.htmx:
+            headers = {
+                'HX-Redirect': success_url
+            }
+            return HttpResponse("Success", headers=headers)
+        return redirect(success_url)
+
+    return render(request, template_name, {"form":form})
+
+def recipe_image_upload_view(request, parent_id=None):
+    template_name = "recipes/upload-image.html"
+    if request.htmx:
+        template_name = "recipes/partials/image-upload-form.html"
+    try:
+        parent_obj = Recipe.objects.get(id=parent_id, user=request.user)
+    except:
+        parent_obj = None
+    if parent_obj is None:
+        raise Http404
+    form = RecipeImageForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.recipe_id = parent_id
+        # obj.recipe_id = parent_id
+        obj.save()
+        success_url = parent_obj.get_edit_url()
+        print(obj.image)
+        print(obj.image.url)
+        print(obj.recipe_id)
         if request.htmx:
             headers = {
                 'HX-Redirect': success_url

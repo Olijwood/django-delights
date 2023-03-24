@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Recipes</h1>
+<h1>My Recipes</h1>
 <h3><a href='{% url "recipes:create" %}'>Add Recipe</a></h3>
 <hr/>
 {% for x in object_list %}
