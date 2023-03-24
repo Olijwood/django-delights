@@ -170,7 +170,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles-cdn" # in production, we want cdn
 
 MEDIA_ROOT = BASE_DIR / "staticfiles-cdn" / "uploads"
 
-
+MEDIA_URL = '/media/'
 from .cdn.conf import * # noqa
 
 # https://www.cfe.sh/blog/django-static-files-digitalocean-spaces

@@ -9,7 +9,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 AWS_S3_ENDPOINT_URL = "https://django-delights.ams3.digitaloceanspaces.com"
 
-AWS_DEFAULT_ACL = 'public-read'
+AWS_DEFAULT_ACL = 'None'
 
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
