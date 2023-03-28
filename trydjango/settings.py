@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     # third-party
     'django_htmx',
     'storages',
-    'sorl.thumbnail',
     # internal
     'articles',
     'inventory',
