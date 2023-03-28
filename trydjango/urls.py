@@ -25,10 +25,11 @@ from accounts.views import (
 from meals.views import meal_queue_toggle_view
 
 from search.views import search_view
-from .views import home_view
+from .views import home_view, about
 
 urlpatterns = [
-    path('', home_view), # index / home / root 
+    path('', home_view), # index / home / root
+    path('about/', about, name='about'),
     path('pantry/recipes/', include('recipes.urls')),
     path('articles/', include('articles.urls')),
     path('meal-toggle/<int:recipe_id>/', meal_queue_toggle_view, name='meal-toggle'),

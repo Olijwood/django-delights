@@ -1,6 +1,21 @@
-Searched for {{ request.GET.q }} under {{ request.GET.type|title }}s
+<p align="center">Searched for {{ request.GET.q }} under {{ request.GET.type|title }}s</p>
 {% for object in queryset %}
-    <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a></li>
+    <style>
+        .account-img {
+            height: 125px;
+            width: 125px;
+            margin-bottom: 10px;
+      }
+        
+    </style>
+    
+            <div class='mb-3' align="center">
+                <img src="https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ object.get_image }}" alt="recipe image" class="rounded-circle account-img">
+                <br>
+                <a class='lead' href='{{ object.get_absolute_url }}'>    {{ object.name }}</a> 
+                <small><p>{{ object.description }}</p></small>
+                <div hx-get='{% url "meal-toggle" recipe_id=object.id %}' hx-trigger='revealed'></div>
+            </div>
 {% empty %}
 
 <li>No results found</li>

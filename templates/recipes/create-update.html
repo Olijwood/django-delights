@@ -24,7 +24,6 @@
                
             {% endif %}
             {% if object.id %}
-            {{ object.id }}
             <div class="media" align="center">
                 <img src="https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ image }}" alt="recipe image" class="rounded-circle account-img">
                 <small align="center"><div hx-get="{{ object.get_image_upload_url }}" hx-trigger='revealed'></div></small>

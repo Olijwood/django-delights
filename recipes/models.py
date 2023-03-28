@@ -1,6 +1,7 @@
 import pathlib
 import pint
 import uuid
+from sorl.thumbnail import get_thumbnail
 
 from django.conf import settings
 from django.db import models
@@ -47,6 +48,7 @@ class Recipe(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True) 
     updated = models.DateTimeField(auto_now=True) 
     active = models.BooleanField(default=True)
+    rating = models.FloatField(blank=True, null=True)
 
     objects = RecipeManager()
 
@@ -76,7 +78,11 @@ class Recipe(models.Model):
         return reverse("recipes:recipe-ingredient-image-upload", kwargs={"parent_id": self.id})
     
     def get_image(self):
-        return self.recipeimage_set.get(recipe__id=self.id)
+        recipe_image = RecipeImage.objects.filter(recipe__id=self.id).last()
+        image = 'recipes/images/default.jpg'
+        if recipe_image is not None:
+            image =  recipe_image.image
+        return image
 
 def recipe_image_upload_handler(instance, filename):
     fpath = pathlib.Path(filename)
@@ -160,5 +166,12 @@ class RecipeIngredient(models.Model):
             self.quantity_as_float = None
         super().save(*args, **kwargs)
 
-# class RecipeImage():
-#     recipe = models.ForeignKey(Recipe)
+class Comment(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text = models.TextField(max_length=500)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Comment by {self.author} on {self.recipe.name}'

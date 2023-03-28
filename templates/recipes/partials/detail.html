@@ -1,26 +1,104 @@
-<div class='row'>
-    <div class='col-12 col-md-8'>
+<style>
+    .account-img {
+        height: 125px;
+        width: 125px;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="row">
+    <div class="col-12 col-md-6">
+        <div class="media">
+            <img src='https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ object.get_image }}' alt="recipe image" class="rounded-circle account-img" style="height: 250px; width: 250 px;">
+        </div>
         <h1>{{ object.name }}</h1>
-
         {% if object.user == request.user %}
             {% if object.get_edit_url %}
                 <small>
-                    <a href='{{ object.get_edit_url }}'>Edit</a> 
-                    <a href='{{ object.get_delete_url }}' hx-post='{{ object.get_delete_url }}' hx-confirm='Are you sure you want to delete {{ object.name }}?' hx-trigger='click'
-                    >Delete</a> 
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">
+                        <a href='{{ object.get_edit_url }}'>Edit</a>
+                    </button>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">
+                        <a href='{{ object.get_delete_url }}' hx-post='{{ object.get_delete_url }}' hx-confirm='Are you sure you want to delete {{ object.name }}?' hx-trigger='click'>Delete</a> 
+                    </button>
                 </small>
             {% endif %}
         {% endif %}
-
+        <p></p>
+        <h4>Rating: {{ object.rating|default:"N/A" }}{% if object.rating %}/10{% endif %} </h4>
+        {% if request.user.is_authenticated %}
+            <small>
+            <form method="post" action="{% url 'recipes:recipe-rating' object.id %}" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group mr-2">
+                    <label for="rating" class="mr-2">Rate this recipe:</label>
+                    <input type="number" name="rating" min="0" max="10" step="0.1" class="form-control form-control-sm" style="width: auto;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </form>
+        </small>
+        {% endif%}
+        <br>
+        <div hx-get='{% url "meal-toggle" recipe_id=object.id %}' hx-trigger='revealed'></div>
+        <p></p>
+        <h6>Description:</h6>
         <p>{{ object.description }}</p>
-        <p>{{ object.directions }}</p>
     </div>
-<div class='col-12 col-md-4'>
 
-<ul>
-    {% for ingredient in object.get_ingredients_children %}
-        <li>
-            {% if ingredient.quantity %}{{ ingredient.quantity }} {% endif %}{% if ingredient.unit %}{{ ingredient.unit|lower }}{% endif %} - {{ ingredient.name|title }}
-        </li>
-    {% endfor %}
-</ul>
+    <div class="col-12 col-md-6">
+        <h6>Directions</h6>
+        <p>{{ object.directions }}</p>
+        <h4>Ingredients:</h4>
+        <ul>
+            {% for ingredient in object.get_ingredients_children %}
+                <li>
+                    {% if ingredient.quantity %}{{ ingredient.quantity }} {% endif %}{% if ingredient.unit %}{{ ingredient.unit|lower }}{% endif %} - {{ ingredient.name|title }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-12" align="center">
+        <h3>Comments</h3>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'recipes:comment' object.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+            <label for="comment_text">Add a comment:</label>
+            <textarea class="form-control" name="comment_text" id="comment_text" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a comment.</p>
+        {% endif %}
+
+        <br>
+
+        {% if comments %}
+        <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+            <th>Author</th>
+            <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+            <td class="font-weight-bold">{{ comment.author.username }} <br> <small>{{ comment.created_date|date:'F j, Y' }}</small></td>
+            <td>{{ comment.text }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+            <td colspan="2">No comments yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        {% else %}
+        <p>No comments yet.</p>
+        {% endif %}
+    </div>
+</div>

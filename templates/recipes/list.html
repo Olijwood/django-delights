@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Recipes</h1>
-<h3><a href='{% url "recipes:create" %}'>Add Recipe</a></h3>
+<style>
+    .account-img {
+        height: 125px;
+        width: 125px;
+        margin-bottom: 10px;
+  }
+    
+</style>
+<h1 align="center">Recipes</h1>
+<h3 align="center"><a href='{% url "recipes:create" %}'>Add Recipe</a></h3>
 <hr/>
 {% for x in object_list %}
-        <div class='mb-3'>
-            <a class='lead' href='{{ x.get_absolute_url }}'>{{ x.name }}</a>
+        <div class='mb-3' align="center">
+            <img src="https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ x.get_image }}" alt="recipe image" class="rounded-circle account-img">
+            <br>
+            <a class='lead' href='{{ x.get_absolute_url }}'>    {{ x.name }}</a> 
+            <small><p>{{ x.description }}</p></small>
             <div hx-get='{% url "meal-toggle" recipe_id=x.id %}' hx-trigger='revealed'></div>
-    </div>
+        </div>
     {% endfor %}
 
 {% endblock content %}

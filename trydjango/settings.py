@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = str(os.environ.get('DEBUG')) == "1" # 1 == True
 
 ENV_ALLOWED_HOST = os.environ.get('DJANGO_ALLOWED_HOST') or None
-ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST'), 'localhost']
+ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST'), '127.0.0.1']
 if not DEBUG:
     ALLOWED_HOSTS += [os.environ.get('DJANGO_ALLOWED_HOST')]
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # third-party
     'django_htmx',
     'storages',
+    'sorl.thumbnail',
     # internal
     'articles',
     'inventory',

@@ -13,3 +13,8 @@ body {
 .htmx-request .htmx-inverted-indicator {
     display: none;
 }
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-bottom: 10px;
+}
