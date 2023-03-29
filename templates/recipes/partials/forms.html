@@ -13,12 +13,14 @@
    {% endfor %}
 
 
-    
-    <div class='htmx-indicator'>Loading...</div>
-    <button class='htmx-inverted-indicator' style='margin-top:10px;' type='submit' >Save</button>
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
-    <a href='{{ object.get_delete_url }}'>Delete</a> 
+    <div align="center">
+        <div class='htmx-indicator'>Loading...</div>
+        <button align="center" class='htmx-inverted-indicator btn btn-outline-secondary btn-sm' style='margin-top:10px;' type='submit' >Save</button>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <p></p>
+        <button align="center" class="btn btn-danger btn-sm"><a href='{{ object.get_delete_url }}' style="color:white;">Delete</a></button>
+    </div>
 </form>
 </div>

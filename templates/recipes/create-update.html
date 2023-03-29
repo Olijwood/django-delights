@@ -32,7 +32,7 @@
             {% include 'recipes/partials/forms.html' %}
             
             {% if not new_ingredient_url %}
-                <small><p>(You can add ingredients once you have clicked 'Save')</p></small>
+                <small><p style="color: grey" align="center">(You can add ingredients once you have clicked 'Save')</p></small>
             {% endif %}
         </div>
         <br>
@@ -40,21 +40,22 @@
         <div class='{% if object.id %}col-12 col-md-4 {% else %} d-none {% endif %}'>
             {% if new_ingredient_url %}
             <br>  
-            <h3>Ingredients</h3>
             
-            <div id='ingredients-list'>
+            <div id='ingredients-list' align="center">
+            <h3>Ingredients</h3>
             {% for ingredient in object.get_ingredients_children %}
                     {% include 'recipes/partials/ingredient-inline.html' with object=ingredient %}
             {% endfor %}
-            </div>
+            
             <br>
                          
             <button hx-get="{{ new_ingredient_url }}" hx-trigger='click'
-                hx-target='#ingredients-list' hx-swap='beforeend'>Add ingredient</button>
+                hx-target='#ingredients-list' hx-swap='beforeend' class="btn btn-success">Add ingredient</button>
                 <br>
                 <br>
                 <small><div hx-get="{{ object.get_ingredients_image_upload_url }}" hx-trigger='revealed'></div></small>
             {% endif %}
+        </div>
         </div>
 </div>
 

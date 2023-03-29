@@ -10,7 +10,8 @@
         <div class="media">
             <img src='https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ object.get_image }}' alt="recipe image" class="rounded-circle account-img" style="height: 250px; width: 250 px;">
         </div>
-        <h1>{{ object.name }}</h1>
+        <h1>{{ object.name }}</h1> 
+        <small><p style="color: grey;">By: {{object.user.username}}</p></small>
         {% if object.user == request.user %}
             {% if object.get_edit_url %}
                 <small>
@@ -25,7 +26,7 @@
         {% endif %}
         <p></p>
         <h4>Rating: {{ object.rating|default:"N/A" }}{% if object.rating %}/10{% endif %} </h4>
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and request.user != object.user %}
             <small>
             <form method="post" action="{% url 'recipes:recipe-rating' object.id %}" class="form-inline">
                 {% csrf_token %}
@@ -61,17 +62,19 @@
 <div class="row">
     <div class="col-12 col-md-12" align="center">
         <h3>Comments</h3>
-        {% if user.is_authenticated %}
-        <form method="post" action="{% url 'recipes:comment' object.id %}">
-            {% csrf_token %}
-            <div class="form-group">
-            <label for="comment_text">Add a comment:</label>
-            <textarea class="form-control" name="comment_text" id="comment_text" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a comment.</p>
+        {% if request.user != object.user %}
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'recipes:comment' object.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                <label for="comment_text">Add a comment:</label>
+                <textarea class="form-control" name="comment_text" id="comment_text" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a comment.</p>
+            {% endif %}
         {% endif %}
 
         <br>
