@@ -1,7 +1,6 @@
 import pathlib
 import pint
 import uuid
-from sorl.thumbnail import get_thumbnail
 
 from django.conf import settings
 from django.db import models
