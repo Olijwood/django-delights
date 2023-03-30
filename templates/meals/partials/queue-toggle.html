@@ -8,5 +8,5 @@
     {% csrf_token %}
 
 
-<button type='submit' class='btn {% if is_pending %} btn-outline-secondary  {% else %} btn-primary {% endif %}'>{{ toggle_label }}</button>
+<button type='submit' class='btn {% if is_pending %} btn-outline-success {% else %} btn-success {% endif %}'>{{ toggle_label }}</button>
 </form>
