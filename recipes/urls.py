@@ -12,7 +12,6 @@ from .views import (
     recipe_ingredient_delete_view,
     recipe_ingredient_image_upload_view,
     recipe_image_upload_view,
-    recipe_comments_view,
     recipe_submit_review_view,
 )
 
@@ -30,7 +29,6 @@ urlpatterns = [
     path("<int:parent_id>/ingredients/image-upload/", recipe_ingredient_image_upload_view, name='recipe-ingredient-image-upload'),
     path("<int:parent_id>/image-upload/", recipe_image_upload_view, name='recipe-image-upload'),
     path("<int:parent_id>/ingredient/<int:id>/delete/", recipe_ingredient_delete_view, name='ingredient-delete'),
-    path('<int:id>/comment/', recipe_comments_view, name='comment'),
     path("<int:id>/delete/", recipe_delete_view, name='delete'),
     path("<int:id>/edit/", recipe_update_view, name='update'),
     path("<int:id>/submit-review/", recipe_submit_review_view ,name='submit-review'),

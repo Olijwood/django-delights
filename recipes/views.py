@@ -9,7 +9,7 @@ from django.db.models import Avg
 from PIL import Image
 
 from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm, RecipeImageForm, RecipeReviewForm
-from .models import Recipe, RecipeIngredient, RecipeImage, Comment, RecipeReview
+from .models import Recipe, RecipeIngredient, RecipeImage, RecipeReview
 from .services import extract_text_via_ocr_service
 from .utils import (
     convert_to_qty_units,
@@ -102,31 +102,16 @@ def recipe_detail_hx_view(request, id=None):
         obj = None
     if obj is  None:
         return HttpResponse("Not found.")
-    comments = obj.comments.all()
     reviews = obj.reviews.all()
     rating_count = reviews.count()
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
     context = {
         "object": obj,
-        'comments': comments,
         'rating_count': rating_count,
         "average_rating": average_rating,
         "reviews": reviews,
     }
     return render(request, "recipes/partials/detail.html", context) 
-
-@login_required
-def recipe_comments_view(request, id=None):
-    if request.method == "POST":
-        try:
-            recipe = Recipe.objects.get(id=id)
-        except Recipe.DoesNotExist:
-            return HttpResponseNotFound("Recipe not found")
-        comment_text = request.POST.get('comment_text')
-        if comment_text:
-            comment = Comment(recipe=recipe, author=request.user, text=comment_text)
-            comment.save()
-    return redirect('recipes:detail', id=id)
 
 @login_required
 def recipe_create_view(request):
