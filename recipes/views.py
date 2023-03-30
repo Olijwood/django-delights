@@ -1,14 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory # model form for querysets
 from django.urls import reverse
-from django.http import HttpResponse, Http404, HttpResponseNotFound
+from django.http import HttpResponse, Http404, HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.db.models import Avg
 
 from PIL import Image
 
-from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm, RecipeImageForm
-from .models import Recipe, RecipeIngredient, RecipeImage, Comment
+from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm, RecipeImageForm, RecipeReviewForm
+from .models import Recipe, RecipeIngredient, RecipeImage, Comment, RecipeReview
 from .services import extract_text_via_ocr_service
 from .utils import (
     convert_to_qty_units,
@@ -102,14 +103,15 @@ def recipe_detail_hx_view(request, id=None):
     if obj is  None:
         return HttpResponse("Not found.")
     comments = obj.comments.all()
-    if request.method == 'POST':
-        comment_text = request.POST.get('comment_text')
-        if comment_text:
-            comment = Comment(recipe__id=obj.id, author=request.user, text=comment_text)
-            comment.save()
+    reviews = obj.reviews.all()
+    rating_count = reviews.count()
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
     context = {
         "object": obj,
         'comments': comments,
+        'rating_count': rating_count,
+        "average_rating": average_rating,
+        "reviews": reviews,
     }
     return render(request, "recipes/partials/detail.html", context) 
 
@@ -125,35 +127,6 @@ def recipe_comments_view(request, id=None):
             comment = Comment(recipe=recipe, author=request.user, text=comment_text)
             comment.save()
     return redirect('recipes:detail', id=id)
-
-
-@login_required
-def recipe_rating_view(request, id=None):
-    if request.method == 'POST':
-        try:
-            recipe = Recipe.objects.get(id=id)
-        except Recipe.DoesNotExist:
-            return HttpResponseNotFound("Recipe not found")
-
-        rating = request.POST.get('rating')
-        if rating is not None:
-            try:
-                rating = float(rating)
-                if rating < 0 or rating > 10:
-                    raise ValueError("Rating must be between 0 and 10")
-            except ValueError:
-                messages.error(request, "Invalid rating")
-            else:
-                if recipe.rating is not None:
-                    recipe.rating = (recipe.rating + rating) / 2
-                else:
-                    recipe.rating = rating
-                recipe.save()
-                messages.success(request, "Thank you for rating this recipe")
-        else:
-            messages.error(request, "Rating is required")
-    return redirect('recipes:detail', id=id)
-
 
 @login_required
 def recipe_create_view(request):
@@ -310,3 +283,30 @@ def recipe_image_upload_view(request, parent_id=None):
         return redirect(success_url)
 
     return render(request, template_name, {"form":form})
+
+@login_required
+def recipe_submit_review_view(request, id):
+    recipe = Recipe.objects.get(id=id)
+    if request.method == 'POST':
+        try:
+            reviews = RecipeReview.objects.get(user__id=request.user.id, recipe__id=recipe.id)
+            form = RecipeReviewForm(request.POST, instance=reviews)
+            form.save()
+            messages.success(request, 'Thank you! Your review has been updated!')
+            success_url = reverse('recipes:detail', kwargs={'id': id})
+            return redirect(success_url)
+        except RecipeReview.DoesNotExist:
+            form = RecipeReviewForm(request.POST)
+            if form.is_valid():
+                data = RecipeReview()
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.recipe_id = id
+                data.user_id = request.user.id
+                data.save()
+                messages.success(request, 'Thank you! Your review has been created!')
+                success_url = reverse('recipes:detail', kwargs={'id': id})
+                return redirect(success_url)
+    return redirect(success_url)

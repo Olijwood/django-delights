@@ -6,6 +6,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 from .utils import number_str_to_float
 from .validators import validate_unit_of_measure
 """
@@ -18,7 +20,6 @@ from .validators import validate_unit_of_measure
         - Ingredients
         - Directions for Ingredients
 """
-
 
 class RecipeQuerySet(models.QuerySet):
     def search(self, query=None):
@@ -47,7 +48,6 @@ class Recipe(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True) 
     updated = models.DateTimeField(auto_now=True) 
     active = models.BooleanField(default=True)
-    rating = models.FloatField(blank=True, null=True)
 
     objects = RecipeManager()
 
@@ -97,6 +97,20 @@ def recipe_ingredient_image_upload_handler(instance, filename):
     new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
     return f"recipes/ingredient/{new_fname}{fpath.suffix}"
 
+class RecipeReview(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='reviews')
+    subject = models.CharField(max_length=100, null=True)
+    review = models.TextField(max_length=500)
+    rating = models.FloatField()
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subject
+    
 
 class RecipeIngredientImage(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

@@ -1,7 +1,7 @@
 from django import forms
 
 
-from .models import Recipe, RecipeIngredient, RecipeIngredientImage, RecipeImage
+from .models import Recipe, RecipeIngredient, RecipeIngredientImage, RecipeImage, RecipeReview
 
 class RecipeIngredientImageForm(forms.ModelForm):
     class Meta:
@@ -53,3 +53,8 @@ class RecipeIngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
         fields = ['name', 'quantity', 'unit']
+
+class RecipeReviewForm(forms.ModelForm):
+    class Meta:
+        model = RecipeReview
+        fields = ['subject', 'review', 'rating']

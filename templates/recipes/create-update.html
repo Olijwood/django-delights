@@ -16,49 +16,49 @@
         margin-bottom: 10px;
   }
 </style>
-
-<div class='row'>
-        <div class='{% if object.id %}col-12 col-md-8 {% else %} col-md-6 mx-auto {% endif %}'>
-            {% if not object.id %}
-                <h1>Create Recipe</h1>
-               
-            {% endif %}
-            {% if object.id %}
-            <div class="media" align="center">
-                <img src="https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ image }}" alt="recipe image" class="rounded-circle account-img">
-                <small align="center"><div hx-get="{{ object.get_image_upload_url }}" hx-trigger='revealed'></div></small>
+<section class="section-content padding-x padding-y bg">
+    <div class='row'>
+            <div class='{% if object.id %}col-12 col-md-8 {% else %} col-md-6 mx-auto {% endif %}'>
+                {% if not object.id %}
+                    <h1>Create Recipe</h1>
+                
+                {% endif %}
+                {% if object.id %}
+                <div class="media" align="center">
+                    <img src="https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ image }}" alt="recipe image" class="rounded-circle account-img">
+                    <small align="center"><div hx-get="{{ object.get_image_upload_url }}" hx-trigger='revealed'></div></small>
+                </div>
+                {% endif %}
+                {% include 'recipes/partials/forms.html' %}
+                
+                {% if not new_ingredient_url %}
+                    <small><p style="color: grey" align="center">(You can add ingredients once you have clicked 'Save')</p></small>
+                {% endif %}
             </div>
-            {% endif %}
-            {% include 'recipes/partials/forms.html' %}
-            
-            {% if not new_ingredient_url %}
-                <small><p style="color: grey" align="center">(You can add ingredients once you have clicked 'Save')</p></small>
-            {% endif %}
-        </div>
-        <br>
-
-        <div class='{% if object.id %}col-12 col-md-4 {% else %} d-none {% endif %}'>
-            {% if new_ingredient_url %}
-            <br>  
-            
-            <div id='ingredients-list' align="center">
-            <h3>Ingredients</h3>
-            {% for ingredient in object.get_ingredients_children %}
-                    {% include 'recipes/partials/ingredient-inline.html' with object=ingredient %}
-            {% endfor %}
-            
             <br>
-                         
-            <button hx-get="{{ new_ingredient_url }}" hx-trigger='click'
-                hx-target='#ingredients-list' hx-swap='beforeend' class="btn btn-success">Add ingredient</button>
-                <br>
-                <br>
-                <small><div hx-get="{{ object.get_ingredients_image_upload_url }}" hx-trigger='revealed'></div></small>
-            {% endif %}
-        </div>
-        </div>
-</div>
 
+            <div class='{% if object.id %}col-12 col-md-4 {% else %} d-none {% endif %}'>
+                {% if new_ingredient_url %}
+                <br>  
+                
+                <div id='ingredients-list' align="center">
+                <h3>Ingredients</h3>
+                {% for ingredient in object.get_ingredients_children %}
+                        {% include 'recipes/partials/ingredient-inline.html' with object=ingredient %}
+                {% endfor %}
+                
+                <br>
+                            
+                <button hx-get="{{ new_ingredient_url }}" hx-trigger='click'
+                    hx-target='#ingredients-list' hx-swap='beforeend' class="btn btn-success">Add ingredient</button>
+                    <br>
+                    <br>
+                    <small><div hx-get="{{ object.get_ingredients_image_upload_url }}" hx-trigger='revealed'></div></small>
+                {% endif %}
+            </div>
+            </div>
+    </div>
+</section>
 <script>
     
     
