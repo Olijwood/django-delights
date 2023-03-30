@@ -24,6 +24,7 @@
             <br>
             <div hx-get='{% url "meal-toggle" recipe_id=x.id %}' hx-trigger='revealed'></div>
         </div>
+        <br>
     {% endfor %}
 </section>
 {% endblock content %}
