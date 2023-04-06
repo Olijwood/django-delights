@@ -34,7 +34,7 @@ if not DEBUG:
 # python manage.py migrate
 
 INSTALLED_APPS = [
-    #'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'recipes',
     'search',
     'accounts',
-    'inventory',
-    'meals',
+    # 'inventory',
+    # 'meals',
 ]
 
 MIDDLEWARE = [
