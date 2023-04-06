@@ -28,9 +28,9 @@ urlpatterns = [
 #     path('articles/', include('articles.urls')),
 #     path('accounts/', include('accounts.urls')),
 #     path('meal-toggle/<int:recipe_id>/', meal_queue_toggle_view, name='meal-toggle'),
-#     path('register/', registration_view, name='register'),
-#     path('logout', logout_view, name='logout'),
-#     path('login/', login_view, name='login'),
+    path('register/', registration_view, name='register'),
+    path('logout', logout_view, name='logout'),
+    path('login/', login_view, name='login'),
 #     path('search/', search_view, name='search'),
 #     #path('admin/', admin.site.urls),
  ]
