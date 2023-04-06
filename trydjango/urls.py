@@ -21,9 +21,9 @@ from search.views import search_view
 from accounts.views import registration_view, logout_view, login_view
 from .views import home_view, about
 
-# urlpatterns = [
+urlpatterns = [
 #     path('', home_view, name="home"), # index / home / root
-#     path('about/', about, name='about'),
+     path('about/', about, name='about'),
 #     path('pantry/recipes/', include('recipes.urls')),
 #     path('articles/', include('articles.urls')),
 #     path('accounts/', include('accounts.urls')),
@@ -33,4 +33,4 @@ from .views import home_view, about
 #     path('login/', login_view, name='login'),
 #     path('search/', search_view, name='search'),
 #     #path('admin/', admin.site.urls),
-# ]
+ ]
