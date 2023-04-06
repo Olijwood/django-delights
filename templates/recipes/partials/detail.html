@@ -1,4 +1,10 @@
-
+<style>
+    .account-profile-pic {
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+    }
+</style>
 <section class="section-content padding-y padding-x bg">
     <div class="container">
             <div class="row">
@@ -7,7 +13,7 @@
                         <img src='https://django-delights.ams3.digitaloceanspaces.com/django-delights/mediafiles/{{ object.get_image }}' alt="recipe image" class="recipe-img">
                     </div>
                     <h1>{{ object.name }}</h1> 
-                    <small><p style="color: grey;">By: {{object.user.username}}</p></small>
+                    <small><p style="color: grey;"><img src="{{ account.get_image }}" alt="account img" class="account-profile-pic"> By: {{object.user.username}}</p></small>
                     {% if object.user == request.user %}
                         {% if object.get_edit_url %}
                             <small>

@@ -8,6 +8,7 @@ from django.db.models import Avg
 
 from PIL import Image
 
+from accounts.models import Account, AccountImage
 from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm, RecipeImageForm, RecipeReviewForm
 from .models import Recipe, RecipeIngredient, RecipeImage, RecipeReview
 from .services import extract_text_via_ocr_service
@@ -102,6 +103,7 @@ def recipe_detail_hx_view(request, id=None):
         obj = None
     if obj is  None:
         return HttpResponse("Not found.")
+    user = Account.objects.get(id=obj.user.id)
     reviews = obj.reviews.all()
     rating_count = reviews.count()
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
@@ -110,6 +112,7 @@ def recipe_detail_hx_view(request, id=None):
         'rating_count': rating_count,
         "average_rating": average_rating,
         "reviews": reviews,
+        "account": user,
     }
     return render(request, "recipes/partials/detail.html", context) 
 
