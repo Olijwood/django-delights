@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'storages',
     # internal
     'articles',
-    'inventory',
-    'meals',
     'recipes',
     'search',
+    'accounts',
+    'inventory',
+    'meals',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,7 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'accounts.Account'
 
 WSGI_APPLICATION = 'trydjango.wsgi.application'
 

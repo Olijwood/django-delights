@@ -23,6 +23,15 @@
               <li><a class="dropdown-item" href="{% url 'recipes:list' %}">View All</a></li>
             </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:account' id=request.user.id %}">My Account</a></li>
+            </ul>
+          </li>
           {% if not request.user.is_authenticated %}
           <li class="nav-link">
             <a class="dropdown-item" href="{% url 'login' %}">Login</a>
