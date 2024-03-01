@@ -4,11 +4,12 @@ from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from django.utils import timezone
-# Create your models here.
 
 from .utils import slugify_instance_title
 
 User = settings.AUTH_USER_MODEL
+
+#Model for Article Search queryset
 
 class ArticleQuerySet(models.QuerySet):
     def search(self, query=None):
@@ -16,6 +17,8 @@ class ArticleQuerySet(models.QuerySet):
             return self.none()
         lookups = Q(title__icontains=query) | Q(content__icontains=query)
         return self.filter(lookups) 
+    
+#Model for Article Search Functions
 
 class ArticleManager(models.Manager):
     def get_queryset(self):
@@ -23,6 +26,8 @@ class ArticleManager(models.Manager):
 
     def search(self, query=None):
         return self.get_queryset().search(query=query)
+    
+#Model for the Article Dataset
 
 class Article(models.Model):
     # https://docs.djangoproject.com/en/3.2/ref/models/fields/#model-field-types

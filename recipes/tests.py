@@ -6,6 +6,7 @@ from .models import RecipeIngredient, Recipe
 
 User = get_user_model()
 
+#Tests for User SetUp and checking passwords
 class UserTestCase(TestCase):
     def setUp(self):
         self.user_a = User.objects.create_user('cfe', password='abc123')
@@ -14,8 +15,7 @@ class UserTestCase(TestCase):
         checked = self.user_a.check_password("abc123")
         self.assertTrue(checked)
 
-    
-
+#Test for Recipe Utilities
 class RecipeTestCase(TestCase):
     def setUp(self):
         self.user_a = User.objects.create_user('cfe', password='abc123')

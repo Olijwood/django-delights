@@ -29,7 +29,7 @@ def number_str_to_float(amount_str:str) -> (any, bool):
         success = True
     return number_as_float, success
 
-
+#Function to parze a paragraph to recipe line
 
 def parse_paragraph_to_recipe_line(paragraph):
     paragraph = paragraph.replace("\n", " ").replace("\f", " ").replace("\t", " ")
@@ -46,7 +46,7 @@ def parse_paragraph_to_recipe_line(paragraph):
             current_str += f" {line}"
     return results
 
-
+#Function to convert units of measurement between Imperial/Metric
 
 def convert_to_qty_units(results: List[str]):
     ureg = UnitRegistry()

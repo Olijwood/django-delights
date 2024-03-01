@@ -4,7 +4,8 @@ from django.urls import reverse
 
 import pathlib
 import uuid
-# Create your models here.
+
+#Model for creating: users, Staff users, Super users
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, username, password=None, is_active=True, is_staff=False, is_admin=False):
@@ -48,6 +49,8 @@ def recipe_image_upload_handler(instance, filename):
     fpath = pathlib.Path(filename)
     new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
     return f"accounts/images/{new_fname}{fpath.suffix}"
+
+#Model for the Account dataset
 
 class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name='email', max_length=60, unique=True)
@@ -94,6 +97,8 @@ class Account(AbstractBaseUser):
     @property
     def is_active(self):
         return self.active
+    
+#Model for Account image dataset
     
 class AccountImage(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)

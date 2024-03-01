@@ -3,6 +3,8 @@ from django import forms
 
 from .models import Recipe, RecipeIngredient, RecipeIngredientImage, RecipeImage, RecipeReview
 
+#Form to handle the upload of the Recipe Ingredient Image
+
 class RecipeIngredientImageForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredientImage
@@ -11,6 +13,8 @@ class RecipeIngredientImageForm(forms.ModelForm):
             "image": "Extract via Image Upload"
         }
 
+#Form to handle the upload of the Recipe Image
+
 class RecipeImageForm(forms.ModelForm):
     class Meta:
         model = RecipeImage
@@ -18,6 +22,8 @@ class RecipeImageForm(forms.ModelForm):
         labels = {
             "image": "Upload image of your recipe here:"
         }
+
+#Form to handle the upload of the Recipe
 
 class RecipeForm(forms.ModelForm):
     error_css_class = 'error-field'
@@ -48,11 +54,14 @@ class RecipeForm(forms.ModelForm):
         self.fields['description'].widget.attrs.update({'rows': '2'})
         self.fields['directions'].widget.attrs.update({'rows': '4'})
 
+#Form to handle the upload of the Recipe Ingredient
 
 class RecipeIngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
         fields = ['name', 'quantity', 'unit']
+
+#Form to handle the upload of the Recipe Review
 
 class RecipeReviewForm(forms.ModelForm):
     class Meta:

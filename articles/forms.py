@@ -2,6 +2,8 @@ from django import forms
 
 from .models import Article
 
+#Form to create articles and clean the input data
+
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article

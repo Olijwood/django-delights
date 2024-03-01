@@ -4,6 +4,8 @@ from django.shortcuts import render
 from recipes.models import Recipe
 from .models import Meal
 
+#View to add Recipes to the User's Meals
+
 def meal_queue_toggle_view(request, recipe_id=None):
     if not request.htmx:
         return HttpResponseBadRequest()

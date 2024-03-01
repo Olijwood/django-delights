@@ -5,6 +5,8 @@ import sys
 import dotenv
 import pathlib
 
+#File to run the server using the relevant host.
+
 def main():
     """Run administrative tasks."""
     DOT_ENV_PATH = pathlib.Path() / '.env'

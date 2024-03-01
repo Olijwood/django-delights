@@ -3,7 +3,7 @@ from django.shortcuts import render
 from articles.models import Article
 from recipes.models import Recipe
 
-
+#Map of search types, including singular/plural
 SEARCH_TYPE_MAPPING = {
     'articles': Article,
     'article': Article,
@@ -12,7 +12,7 @@ SEARCH_TYPE_MAPPING = {
 
 }
 
-
+#Searches the query after filtering for type [Article, Recipe]. It then renders the results page with up to 5 results.
 def search_view(request):
     query = request.GET.get('q')
     search_type = request.GET.get('type')

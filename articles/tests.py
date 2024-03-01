@@ -4,6 +4,8 @@ from django.utils.text import slugify
 from .models import Article
 from .utils import slugify_instance_title
 
+#Tests for Article Utilities
+
 class ArticleTestCase(TestCase):
     def setUp(self):
         self.number_of_articles = 500
@@ -47,8 +49,6 @@ class ArticleTestCase(TestCase):
         unique_slug_list = list(set(slug_list))
         self.assertEqual(len(slug_list), len(unique_slug_list))
 
-    # def test_user_added_slug_unique(self)
-    # 
     def test_article_search_manager(self):
         qs = Article.objects.search(query='hello world')
         self.assertEqual(qs.count(), self.number_of_articles)

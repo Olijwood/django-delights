@@ -16,7 +16,8 @@ from .utils import (
     convert_to_qty_units,
     parse_paragraph_to_recipe_line
 )
-# CRUD -> Create Retrieve Update & Delete
+
+#View for list of recipes
 
 @login_required
 def recipe_list_view(request):
@@ -26,6 +27,8 @@ def recipe_list_view(request):
     }
     return render(request, "recipes/list.html", context)
 
+#View for list of recipe users
+
 @login_required
 def recipe_user_list_view(request):
     qs = Recipe.objects.filter(user=request.user)
@@ -34,6 +37,7 @@ def recipe_user_list_view(request):
     }
     return render(request, "recipes/my-list.html", context)
 
+#View for a recipe
 
 @login_required
 def recipe_detail_view(request, id=None):
@@ -42,6 +46,8 @@ def recipe_detail_view(request, id=None):
         "hx_url": hx_url
     }
     return render(request, "recipes/detail.html", context) 
+
+#View to delete a recipe
 
 
 @login_required
@@ -68,6 +74,8 @@ def recipe_delete_view(request, id=None):
     }
     return render(request, "recipes/delete.html", context)
 
+#View to delete a recipe ingredient
+
 
 @login_required
 def recipe_ingredient_delete_view(request, parent_id=None, id=None):
@@ -91,7 +99,7 @@ def recipe_ingredient_delete_view(request, parent_id=None, id=None):
     }
     return render(request, "recipes/delete.html", context)
 
-
+#View to view a recipe using HTMX
 
 @login_required
 def recipe_detail_hx_view(request, id=None):
@@ -116,6 +124,8 @@ def recipe_detail_hx_view(request, id=None):
     }
     return render(request, "recipes/partials/detail.html", context) 
 
+#View to create a recipe
+
 @login_required
 def recipe_create_view(request):
     form = RecipeForm(request.POST or None)
@@ -137,6 +147,8 @@ def recipe_create_view(request):
             # return render(request, "recipes/partials/detail.html", context)
         return redirect(obj.get_absolute_url())
     return render(request, "recipes/create-update.html", context)  
+
+#View to update a recipe
 
 @login_required
 def recipe_update_view(request, id=None):
@@ -161,6 +173,8 @@ def recipe_update_view(request, id=None):
     if request.htmx:
         return render(request, "recipes/partials/forms.html", context)
     return render(request, "recipes/create-update.html", context)  
+
+#View to update a recipe ingredient using HTMX
 
 
 @login_required
@@ -197,7 +211,7 @@ def recipe_ingredient_update_hx_view(request, parent_id=None, id=None):
         return render(request, "recipes/partials/ingredient-inline.html", context) 
     return render(request, "recipes/partials/ingredient-form.html", context) 
 
-
+#View to upload an image of a recipe ingredient
 
 def recipe_ingredient_image_upload_view(request, parent_id=None):
     template_name = "recipes/ingredient-upload-image.html"
@@ -243,6 +257,8 @@ import os
 from PIL import Image
 import secrets
 
+#View to upload a recipe image
+
 def recipe_image_upload_view(request, parent_id=None):
     template_name = "recipes/upload-image.html"
     if request.htmx:
@@ -271,6 +287,8 @@ def recipe_image_upload_view(request, parent_id=None):
         return redirect(success_url)
 
     return render(request, template_name, {"form":form})
+
+#View to submit a review for a recipe
 
 @login_required
 def recipe_submit_review_view(request, id):

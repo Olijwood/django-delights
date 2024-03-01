@@ -2,6 +2,8 @@ import pint
 from django.core.exceptions import ValidationError
 from pint.errors import UndefinedUnitError
 
+#Function to validate units of measurement
+
 valid_unit_measurements = ['pounds', 'lbs', 'oz', 'gram']
 
 def validate_unit_of_measure(value):

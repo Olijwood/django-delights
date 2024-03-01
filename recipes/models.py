@@ -10,16 +10,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 from .utils import number_str_to_float
 from .validators import validate_unit_of_measure
-"""
-- Global
-    - Ingredients
-    - Recipes
-- User
-    - Ingredients
-    - Recipes
-        - Ingredients
-        - Directions for Ingredients
-"""
+
+#Model for the queryset to search through recuipes
 
 class RecipeQuerySet(models.QuerySet):
     def search(self, query=None):
@@ -31,6 +23,8 @@ class RecipeQuerySet(models.QuerySet):
             Q(directions__icontains=query)
         )
         return self.filter(lookups) 
+    
+#Model for the search function and retrieving the queryset
 
 class RecipeManager(models.Manager):
     def get_queryset(self):
@@ -39,6 +33,7 @@ class RecipeManager(models.Manager):
     def search(self, query=None):
         return self.get_queryset().search(query=query)
 
+#Recipe Model
 
 class Recipe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -88,14 +83,18 @@ def recipe_image_upload_handler(instance, filename):
     new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
     return f"recipes/images/{new_fname}{fpath.suffix}"
 
+#Recipe Image Model
+
 class RecipeImage(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=recipe_image_upload_handler, unique=True, default="recipes/images/default.jpg")
 
 def recipe_ingredient_image_upload_handler(instance, filename):
-    fpath = pathlib.Path(filename)
-    new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
-    return f"recipes/ingredient/{new_fname}{fpath.suffix}"
+        fpath = pathlib.Path(filename)
+        new_fname = str(uuid.uuid1()) # uuid1 -> uuid + timestamps
+        return f"recipes/ingredient/{new_fname}{fpath.suffix}"
+    
+#Recipe Review Model
 
 class RecipeReview(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
@@ -111,15 +110,15 @@ class RecipeReview(models.Model):
     def __str__(self):
         return self.subject
     
+#Recipe Ingredient Image Model
 
 class RecipeIngredientImage(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=recipe_ingredient_image_upload_handler) # path/to/the/actual/file.png
     extracted = models.JSONField(blank=True, null=True)
     
-    # image
-    # extracted_text
 
+#Recipe Ingredient Model
     
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

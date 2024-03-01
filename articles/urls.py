@@ -7,6 +7,8 @@ from .views import (
 )
 
 app_name = 'articles'
+
+#List of Article URLs with the format '(website-url)/(index)'
 urlpatterns = [
     path('', article_search_view, name='search'),
     path('create/', article_create_view, name='create'),

@@ -17,6 +17,8 @@ from .views import (
 
 app_name='recipes'
 
+#list of all Recipe URL's. with the format '(website-url)/(index)'
+
 urlpatterns = [
     path("", recipe_list_view, name='list'),
     path("my-recipes/", recipe_user_list_view, name='my-list'),

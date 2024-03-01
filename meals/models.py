@@ -21,7 +21,7 @@ class MealStatus(models.TextChoices):
     EXPIRED = 'e', 'Expired'
     ABORTED = 'a', 'Aborted'
 
-
+#Model for Meal Queryset
 
 class MealQuerySet(models.QuerySet):
     def by_user_id(self, user_id):
@@ -45,6 +45,7 @@ class MealQuerySet(models.QuerySet):
     def in_queue(self, recipe_id):
         return self.pending().filter(recipe_id=recipe_id).exists()
 
+#Model for Searching Meals
    
 class MealManager(models.Manager):
     def get_queryset(self):
@@ -81,6 +82,8 @@ class MealManager(models.Manager):
             obj.save()
             added = True
         return added
+    
+#Model for Meal dataset
 
 class Meal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

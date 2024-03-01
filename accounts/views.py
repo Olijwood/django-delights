@@ -6,7 +6,8 @@ from django.urls import reverse
 from .forms import RegistrationForm, AccountAuthenticationForm, UpdateAccountForm, AccountImageForm
 from .models import Account
 from recipes.models import Recipe
-# Create your views here.
+
+#View to register
 
 def registration_view(request):
     context = {}
@@ -26,11 +27,15 @@ def registration_view(request):
         context['form'] = form
     return render(request, 'accounts/register.html', context)
 
+#View to logout
+
 def logout_view(request):
     if request.method == "POST":
         logout(request)
         return redirect("/login/")
     return render(request, "accounts/logout.html", {})
+
+#View to login
 
 def login_view(request):
     context = {}
@@ -47,6 +52,8 @@ def login_view(request):
         form = AccountAuthenticationForm()
     context['form'] = form
     return render(request, 'accounts/login.html', context)
+
+#View to view user's account
 
 def account_view(request, id=None):
     try:
@@ -74,6 +81,8 @@ def account_view(request, id=None):
         "object_list": recipes_list
     }
     return render(request, 'accounts/account.html', context)
+
+#View to upload an account image
 
 def account_image_upload_view(request, id=None):
     template_name = "accounts/upload-image.html"

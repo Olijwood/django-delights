@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 
 from .forms import ArticleForm
 from .models import Article
-# Create your views here.
+
+#View to search articles
 
 def article_search_view(request):
     query = request.GET.get('q')
@@ -13,6 +14,8 @@ def article_search_view(request):
         "object_list": qs
     }
     return render(request, "articles/search.html", context=context)
+
+#View to create articles
 
 @login_required
 def article_create_view(request):
@@ -29,22 +32,7 @@ def article_create_view(request):
         # context['created'] = True
     return render(request, "articles/create.html", context=context)
 
-# def article_create_view(request):
-#     # print(request.POST)
-#     form = ArticleForm()
-#     context = {
-#         "form": form
-#     }
-#     if request.method == "POST":
-#         form = ArticleForm(request.POST)
-#         context['form'] = form
-#         if form.is_valid():
-#             title = form.cleaned_data.get("title")
-#             content = form.cleaned_data.get("content")
-#             article_object = Article.objects.create(title=title, content=content)
-#             context['object'] = article_object
-#             context['created'] = True
-#     return render(request, "articles/create.html", context=context)
+#View to view articles
 
 def article_detail_view(request, slug=None):
     article_obj = None
