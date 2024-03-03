@@ -1,5 +1,9 @@
 staticfiles-cdn/
 .DS_STORE
 venv/
+.do/
+.vscode/
+db.sqlite3
+try-django.code-workspace
 
 __pycache__/
